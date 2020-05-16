@@ -3,11 +3,11 @@ A Google Apps script to import data from the MSF Toolbot into the ZaraTools Rost
 
 ## Adding this script to your Roster Organizer
 
-- Create a new sheet called `*Toolbot`
+- Create a new sheet (not spreadsheet) in the Roster Organizer called `*Toolbot`
 
 - In cell A1 in `*Toolbot`, enter your Toolbot Sheet ID
 
-- Add the scrip to the script collection
+- Add the script to the script collection
 
   - Navigate to Tools > Script Editor
   

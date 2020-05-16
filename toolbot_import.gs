@@ -62,8 +62,19 @@ let kw_equipped = "Y";
 
 function msftoolbot_import()
 {
-    // Get Toolbot Sheet Id
-    let toolbotSheetId = SpreadsheetApp.getActive().getSheetByName(tb_sheet_name).getRange(tb_id_cell).getValue();
+    try
+    {
+        // Get Toolbot Sheet Id
+        let toolbotSheetId = SpreadsheetApp.getActive().getSheetByName(tb_sheet_name).getRange(tb_id_cell).getValue();
+    }
+    catch (err)
+    {
+        Browser.msgBox(
+            "Cannot get Toolbot Sheet ID",
+            `Please ensure that a sheet nameed *Toolbot exists in this worksheet.\\n(It should appear as a tab on the bottom of the page)\\n\\nIf it exists, ensure that the Toolbot Sheet ID in cell A1 is correct`,
+            Browser.Buttons.OK);
+        return;
+    }
 
     // Get Toolbot Range and Values
     let tbRange = SpreadsheetApp.openById(toolbotSheetId).getSheetByName(tb_roster_sheet_name).getRange(tb_roster_sheet_range);
