@@ -1,5 +1,5 @@
 // -------------------------------------------------
-// MSF Tools Import
+// MSF ToolBot Import
 // Author: chronolinq
 // -------------------------------------------------
 
@@ -33,7 +33,7 @@ let r_gear_topright = 3;
 let r_gear_middleright = 4;
 let r_gear_bottomright = 5;
 
-// Toolbot Data Columns
+// ToolBot Data Columns
 let tb_id = 0;
 let tb_power = 7;
 let tb_star = 8;
@@ -47,7 +47,7 @@ let tb_ultimate = 20;
 let tb_passive = 21;
 let tb_shards = 22;
 
-// Toolbot Gear Columns
+// ToolBot Gear Columns
 let tb_gear_topleft = 12;
 let tb_gear_middleleft = 13;
 let tb_gear_bottomleft = 14;
@@ -62,23 +62,38 @@ let kw_equipped = "Y";
 
 function msftoolbot_import()
 {
+    let toolbotSheetId;
+
     try
     {
         // Get Toolbot Sheet Id
-        let toolbotSheetId = SpreadsheetApp.getActive().getSheetByName(tb_sheet_name).getRange(tb_id_cell).getValue();
+        toolbotSheetId = SpreadsheetApp.getActive().getSheetByName(tb_sheet_name).getRange(tb_id_cell).getValue();
     }
     catch (err)
     {
         Browser.msgBox(
-            "Cannot get Toolbot Sheet ID",
-            `Please ensure that a sheet nameed *Toolbot exists in this worksheet.\\n(It should appear as a tab on the bottom of the page)\\n\\nIf it exists, ensure that the Toolbot Sheet ID in cell A1 is correct`,
+            "Cannot get MSF ToolBot Sheet ID",
+            `Please ensure that a sheet nameed *Toolbot exists in this worksheet.\\n(It should appear as a tab on the bottom of the page)\\n\\nIf it exists, ensure that the MSF ToolBot Sheet ID in cell A1 is correct`,
             Browser.Buttons.OK);
         return;
     }
 
-    // Get Toolbot Range and Values
-    let tbRange = SpreadsheetApp.openById(toolbotSheetId).getSheetByName(tb_roster_sheet_name).getRange(tb_roster_sheet_range);
-    let tbData = tbRange.getValues();
+    let tbData;
+
+    try
+    {
+        // Get ToolBot Range and Values
+        let tbRange = SpreadsheetApp.openById(toolbotSheetId).getSheetByName(tb_roster_sheet_name).getRange(tb_roster_sheet_range);
+        tbData = tbRange.getValues();
+    }
+    catch (err)
+    {
+        Browser.msgBox(
+            "Cannot get MSF ToolBot data",
+            `Please ensure the MSF ToolBot Sheet ID in the *Toolbot sheet is correct`,
+            Browser.Buttons.OK);
+        return;
+    }
 
     // Hydrate the id <> name dictionary
     getNameDictionary();
@@ -89,7 +104,7 @@ function msftoolbot_import()
     let farmingNames = getNamedRangeA(r_farming_name_range).getValues();
     let farmingGear = getNamedRangeA(r_farming_gear_range).getValues();
 
-    // Look through each row in the Toolbot range
+    // Look through each row in the ToolBot range
     for (let i = 0; i < tbData.length; i++)
     {
         // Try and get the Name from the Id on the row
@@ -139,10 +154,9 @@ function msftoolbot_import()
     // Set the updated data back on the ranges
     getNamedRangeA(r_data_range).setValues(rData);
     getNamedRangeA(r_farming_gear_range).setValues(farmingGear);
-
 }
 
-// Set the Toolbot values on the Roster Organizer
+// Set the ToolBot values on the Roster Organizer
 function setRosterValue(rData, tbData, rIndex, tbIndex)
 {
     let value = tbData[tbIndex];
@@ -151,10 +165,10 @@ function setRosterValue(rData, tbData, rIndex, tbIndex)
     else if (value) rData[rIndex] = value;
 }
 
-// Set the Toolbot redstar values on the Roster Organizer
+// Set the ToolBot redstar values on the Roster Organizer
 function setRosterRedstarValue(rData, tbData, rIndex, tbRedstarActiveIndex, tbRedstarInactiveIndex)
 {
-    // The MSF Toolbot records active and inactive redstars in separate columns so they must be added
+    // The MSF ToolBot records active and inactive redstars in separate columns so they must be added
     let redstar = tbData[tbRedstarActiveIndex]
     let inactive = tbData[tbRedstarInactiveIndex]
 
@@ -183,7 +197,7 @@ function setRosterRedstarValue(rData, tbData, rIndex, tbRedstarActiveIndex, tbRe
     }
 }
 
-// Set the Toolbot shard values on the Roster Organizer
+// Set the ToolBot shard values on the Roster Organizer
 function setShardValue(rData, tbData, rIndex, toolbotIndex)
 {
     // If the character's shards are maxed out, the value will be "MAX". The value should be cleared in that case
@@ -193,7 +207,7 @@ function setShardValue(rData, tbData, rIndex, toolbotIndex)
     else if (value) rData[rIndex] = value;
 }
 
-// Set the Toolbot equipped gear values on the Roster Organizer
+// Set the ToolBot equipped gear values on the Roster Organizer
 function setFarmingValue(rData, tbData, rIndex, tbIndex)
 {
     // If equipped, the value will be "Y", otherwise it will be "N"
