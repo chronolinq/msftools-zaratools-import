@@ -73,7 +73,7 @@ function msftoolbot_import()
     {
         Browser.msgBox(
             "Cannot get MSF ToolBot Sheet ID",
-            `Please ensure that a sheet nameed *Toolbot exists in this worksheet.\\n(It should appear as a tab on the bottom of the page)\\n\\nIf it exists, ensure that the MSF ToolBot Sheet ID in cell A1 is correct`,
+            `Please ensure that a sheet named *Toolbot exists in this worksheet.\\n(It should appear as a tab on the bottom of the page)\\n\\nIf it exists, ensure that the MSF ToolBot Sheet ID in cell A1 is correct`,
             Browser.Buttons.OK);
         return;
     }
